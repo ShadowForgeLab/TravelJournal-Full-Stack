@@ -1,0 +1,206 @@
+/* Global Styles */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: white;
+  background-color: #f5f5f5; /* Light background */
+  padding-top: 70px; /* Prevent content from being hidden under header */
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+/* Header/Navbar */
+header {
+  background-color: #F55A5A;
+  height: 55px;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+
+.logo {
+  width: 24px;
+}
+
+nav > span {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: white;
+}
+
+.add-journal-btn {
+  position: absolute;
+  right: 20px; /* Move to the right side */
+  background-color: white;
+  color: #F55A5A;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+  text-decoration: none;
+}
+
+.add-journal-btn:hover {
+  background-color: #ffe6e6;
+}
+
+/* Position the alert below the navbar */
+.alert-container {
+  position: fixed;
+  top: 60px; /* Navbar is 55px, so we place it right below */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50%; /* Adjust width as needed */
+  z-index: 1050; /* Ensure it appears above content */
+}
+
+
+/* Location Component */
+.location {
+  display: flex;
+  align-items: center;
+  margin-top: 15px;
+}
+
+.location > img {
+  width: 14px;
+  margin-right: 4px;
+}
+
+.location > p {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-right: 10px;
+}
+
+.location > a {
+  color: #2B283A;
+  font-size: 0.7rem;
+  text-decoration: none;
+}
+
+/* Image Container */
+.main-image-container {
+  overflow: hidden;
+  flex-shrink: 0;
+  margin-right: 19px;
+  border-radius: 5px;
+}
+
+.main-image {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+/* Trip Card */
+.trip-dates {
+  font-weight: bold;
+}
+
+.card-text {
+  line-height: 1.5;
+  font-size: 0.8rem;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  font-weight: bold;
+  overflow: hidden;
+}
+
+.card-title {
+  margin-top: 7px;
+  margin-bottom: 17px;
+}
+
+/* Center the Form Correctly */
+.form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 70px); /* Adjusted height to prevent overlap */
+  background-color: #f5f5f5;
+  margin-top: 6.2rem;
+}
+
+/* Form Styling */
+form {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  color: black;
+}
+
+/* Labels */
+label {
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+/* Input and Textarea Fields */
+input[type="text"],
+input[type="date"],
+textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+/* Textarea Styling */
+textarea {
+  resize: vertical;
+  height: 80px;
+}
+
+/* Submit Button */
+input[type="submit"] {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-top: 15px;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+}
+
+input[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+/* Responsive Design */
+@media (max-width: 500px) {
+  form {
+    width: 90%;
+  }
+}
