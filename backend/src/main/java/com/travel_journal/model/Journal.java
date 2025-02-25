@@ -6,8 +6,10 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Data
@@ -27,5 +29,6 @@ public class Journal {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(nullable = false)
     private LocalDate toDate;
+    @Column(columnDefinition = "TEXT")
     private String text;
 }
