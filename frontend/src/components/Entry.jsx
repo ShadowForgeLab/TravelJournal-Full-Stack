@@ -19,7 +19,6 @@ const [alertType, setAlertType] = useState("success");
 
 //to handle delete
   const handleDelete=async (id)=>{
-    console.log(id);
     try{
       //gets the api request
       await axios.delete(`http://localhost:8080/api/journal/${id}`);

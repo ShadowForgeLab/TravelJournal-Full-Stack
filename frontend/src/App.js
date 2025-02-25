@@ -28,7 +28,7 @@ useEffect(() => {
         {/* Home Page (Journal Entries) */}
         <Route path="/" element={<Entry data={data} setDataUpdated={setDataUpdated} />} />
         {/* Update Journal Page */}
-        <Route path={`/update`} element={<UpdateJournal dataUpdated={setDataUpdated} />} />
+        <Route path={`/update`} element={<UpdateJournal setDataUpdated={setDataUpdated} />} />
         {/* Add Journal Page */}
         <Route path="/add"  element={<AddJournal setDataUpdated={setDataUpdated} />} />
       </Routes>

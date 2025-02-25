@@ -39,40 +39,33 @@ export default function UpdateJournal({setDataUpdated}) {
 },[currId])
 
 const handleUpdate = async (e) => {
-    //updating the changes
     e.preventDefault();
+
     try {
-        //date handling
+        // Debug: Log the form data before sending
+        console.log("Form Data Before Sending:", form);
+
         const formattedForm = {
             ...form,
             from_date: form.from_date ? new Date(form.from_date).toISOString().split("T")[0] : "",
             to_date: form.to_date ? new Date(form.to_date).toISOString().split("T")[0] : "",
         };
 
-        await axios.put(`http://localhost:8080/api/journal`, formattedForm, {
-            headers: {
-                "Content-Type": "application/json"
-            }
+        console.log("Formatted Data:", formattedForm); // Debugging
+
+        await axios.put(`http://localhost:8080/api/journal/${form.id}`, formattedForm, {
+            headers: { "Content-Type": "application/json" }
         });
-        setDataUpdated(prev=>!prev)
-        //setting alert meassages
+
+        setDataUpdated(prev => !prev);
         setAlertMessage("Journal updated successfully!");
         setAlertType("success");
-        //setting form to blank
-        setForm({id:"", title: "", country: "", map_link: "", from_date: "", to_date: "", text: "" });
-
-        setTimeout(() => {
-            setAlertMessage("")
-        }, 1000);
-
-        setTimeout(() => {
-            navigate("/");
-        }, 2000);
-    }
-    catch (e) {
-        console.log(e);
+        setTimeout(() => navigate("/"), 2000);
+    } catch (e) {
+        console.error("Error Updating Journal:", e.response ? e.response.data : e.message);
         setAlertMessage("Failed to update journal. Please try again.");
         setAlertType("danger");
+        setTimeout(() => navigate("/"), 2000);
     }
 };
 //onChange handlling
