@@ -2,17 +2,34 @@ import React,{useEffect, useState} from 'react';
 import Marker from '../images/marker.png';
 import {  useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Header from './Header';
 
 export default function Entry(props) {
   const navigate=useNavigate()
   function formatDateRange(fromDate, toDate) {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    
-    const startDate = new Date(fromDate).toLocaleDateString('en-US', options);
-    const endDate = new Date(toDate).toLocaleDateString('en-US', options);
+  
+    if (!fromDate || !toDate) return "Invalid date";
+  
+    try {
+      const safeFromDate = fromDate.replaceAll('/', '-');
+      const safeToDate = toDate.replaceAll('/', '-');
+  
+      const startDate = new Date(safeFromDate);
+      const endDate = new Date(safeToDate);
+  
+      if (isNaN(startDate) || isNaN(endDate)) return "Invalid date";
+     
 
-    return `${startDate} - ${endDate}`;
-}
+  
+      return `${startDate.toLocaleDateString('en-US', options)} - ${endDate.toLocaleDateString('en-US', options)}`;
+    } catch (e) {
+      console.warn("Invalid date input:", fromDate, toDate);
+      return "Invalid date";
+     
+    }
+  }
+  
 const [alertMessage, setAlertMessage] = useState(null); 
 const [alertType, setAlertType] = useState("success"); 
 
@@ -21,7 +38,11 @@ const [alertType, setAlertType] = useState("success");
   const handleDelete=async (id)=>{
     try{
       //gets the api request
-      await axios.delete(`http://localhost:8080/api/journal/${id}`);
+      const token = localStorage.getItem("token");
+      await axios.delete(`http://localhost:8080/api/journal/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }});
       //handles updated data
       props.setDataUpdated(prev=>!prev)
       setAlertMessage("Journal Deleted Successfully!");
@@ -45,6 +66,7 @@ const [alertType, setAlertType] = useState("success");
 
   return (
     <>
+    <Header/>
     {alertMessage && (
   <div className={`alert alert-${alertType} alert-dismissible fade show alert-container`} role="alert">
     {alertMessage}
@@ -63,7 +85,7 @@ const [alertType, setAlertType] = useState("success");
                   </a>
                 </div>
                 <h2 className="card-title">{entry.title}</h2>
-                <p className="trip-dates">{formatDateRange(entry.fromDate, entry.toDate)}</p>
+                <p className="trip-dates">{formatDateRange(entry.from_date, entry.to_date)}</p>
                 <p className="card-text">{entry.text}</p>
 
                 <button onClick={()=>handleUpdate(entry.id)} className="btn btn-warning m-2">

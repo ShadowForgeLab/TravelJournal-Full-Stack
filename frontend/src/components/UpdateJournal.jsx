@@ -1,6 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import {useNavigate,useLocation } from 'react-router-dom';
+import Header from './Header';
+import "./journal.css";
 
 
 const initial={
@@ -27,7 +29,11 @@ export default function UpdateJournal({setDataUpdated}) {
     useEffect(()=>{
         //first getting the data to be updated
     const getJournal=async(id)=>{
-    const response=await axios.get(`http://localhost:8080/api/journal/${id}`)
+        const token = localStorage.getItem("token");
+    const response=await axios.get(`http://localhost:8080/api/journal/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }})
     setForm({
         ...response.data,
         from_date: response.data.fromDate ? response.data.fromDate : "", 
@@ -52,20 +58,25 @@ const handleUpdate = async (e) => {
         };
 
         console.log("Formatted Data:", formattedForm); // Debugging
+        const token = localStorage.getItem("token");
+        console.log("Token being sent:", localStorage.getItem("token"));
 
         await axios.put(`http://localhost:8080/api/journal/${form.id}`, formattedForm, {
-            headers: { "Content-Type": "application/json" }
+            headers: { 
+                "Content-Type": "application/json" ,
+                 Authorization: `Bearer ${token}`
+            }
         });
 
         setDataUpdated(prev => !prev);
         setAlertMessage("Journal updated successfully!");
         setAlertType("success");
-        setTimeout(() => navigate("/"), 2000);
+        setTimeout(() => navigate("/journal"), 2000);
     } catch (e) {
         console.error("Error Updating Journal:", e.response ? e.response.data : e.message);
         setAlertMessage("Failed to update journal. Please try again.");
         setAlertType("danger");
-        setTimeout(() => navigate("/"), 2000);
+        setTimeout(() => navigate("/journal"), 2000);
     }
 };
 //onChange handlling
@@ -80,13 +91,14 @@ const handleChange = (e) => {
 
   return (
     <>
+    <Header/>
     {alertMessage && (
   <div className={`alert alert-${alertType} alert-dismissible fade show alert-container`} role="alert">
     {alertMessage}
   </div>
 )}
     <div className='form-container'>
-      <form  onSubmit={handleUpdate}>
+      <form className='form'  onSubmit={handleUpdate}>
         <label htmlFor="id">Id:</label>
         <input type="text" id="id" name="id" value={form.id} readOnly  />
         <label htmlFor="title">Title:</label>

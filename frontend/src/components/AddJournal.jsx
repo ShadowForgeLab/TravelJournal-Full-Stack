@@ -1,6 +1,8 @@
 import axios from 'axios';
 import React,{useState} from 'react'
 import { useNavigate } from 'react-router-dom';
+import Header from './Header';
+import "./journal.css";
 
 export default function AddJournal({setDataUpdated}) {
 
@@ -26,52 +28,55 @@ export default function AddJournal({setDataUpdated}) {
                 }
             };
 
-    const handleSubmit=async (e)=>{
-      e.preventDefault();
-        try {
-            //correct date fields
-            const formattedForm = {
-              ...journal,
-              fromDate: journal.from_date ? new Date(journal.from_date).toISOString().split("T")[0] : "",
-              toDate: journal.to_date ? new Date(journal.to_date).toISOString().split("T")[0] : "",
-          };
-            await axios.post(`http://localhost:8080/api/journal`, formattedForm, {
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            });
-            setDataUpdated(prev=>!prev)
-            setAlertMessage("Journal added successfully!");
-            setAlertType("success");
-            setJournal({ title: "", country: "", from_date: "", to_date: "", map_link: "", text: "" });
-            setTimeout(() => {
-              setAlertMessage(null);
-          }, 1000);
-            setTimeout(() => {
-                navigate("/");
-              }, 2000);
-        }catch(e){
-          console.log(e);
-            setAlertMessage("Failed to add journal. Please try again.");
-            setAlertType("danger");
-            setTimeout(() => {
-              setAlertMessage(null);
-          }, 1000);
-          setTimeout(() => {
-            navigate("/");
-          }, 2000);
-        }
-    }
+            const handleSubmit = async (e) => {
+              e.preventDefault();
+              try {
+                const formattedForm = {
+                  title: journal.title,
+                  country: journal.country,
+                  map_link: journal.map_link,
+                  text: journal.text,
+                  from_date: journal.from_date,
+                  to_date: journal.to_date
+                };
+            
+                const token = localStorage.getItem("token");
+            
+                await axios.post(`http://localhost:8080/api/journal`, formattedForm, {
+                  headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                  }
+                });
+            
+                setDataUpdated(prev => !prev);
+                setAlertMessage("Journal added successfully!");
+                setAlertType("success");
+                setJournal({ title: "", country: "", from_date: "", to_date: "", map_link: "", text: "" });
+            
+                setTimeout(() => setAlertMessage(null), 1000);
+                setTimeout(() => navigate("/journal"), 2000);
+              } catch (e) {
+                console.log(e);
+                setAlertMessage("Failed to add journal. Please try again.");
+                setAlertType("danger");
+                setTimeout(() => setAlertMessage(null), 1000);
+                setTimeout(() => navigate("/journal"), 2000);
+              }
+            }
+            
 
   return (
-    <>
+    
+    <div className="container">
+    <Header/>
     {alertMessage && (
       <div className={`alert alert-${alertType} alert-dismissible fade show alert-container`} role="alert">
           {alertMessage}
       </div>
   )}
-  <div className="form-container">
-      <form onSubmit={handleSubmit}>
+  <div className='form-container'>
+      <form className='form' onSubmit={handleSubmit} >
           <label htmlFor="title">Title:</label>
           <input type="text" id="title" name="title" value={journal.title} onChange={handleChange} required />
           <br />
@@ -99,6 +104,6 @@ export default function AddJournal({setDataUpdated}) {
           <input type="submit" value="Submit" />
       </form>
   </div>
-</>
+</div>
   )
 }
